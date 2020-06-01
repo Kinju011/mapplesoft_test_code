@@ -1,0 +1,41 @@
+1) SQL query for deleting duplicates records from employee table which does not has primary key
+
+	
+	with cte as (select *, row_number() over (partition by 
+                	empname, dob
+            		order by 
+                	empid
+        		) row_num
+     			from
+        		employee
+		 )
+		delete from cte
+		where row_num > 1;
+
+
+2)what will happen on executation of following query
+
+IF EXISTS (SELECT TOP 1 * FROM dbo.region)
+BEGIN
+	DROP TABLE dbo.region;
+END
+
+as mentioned in 2nd task statement before inserting any data into this table we are executing above query and following operation will performed
+
+first it will check if there are any records available in table by selecting first record in curent scenario there is no record in above table so, condition 
+will become false and hence it will not go into condition block of if statement and do nothing after that if want to drop table than
+have to check if there is any records exists or not in table if records does not exists than drop the table as follow
+
+if not exists (select top 1* from dbo.region)
+begin
+	drop table dbo.region
+end
+
+for getting employee details whose department id is not available in department table is as below
+
+a) select e.* from emp_table e left join userdetails u on e.deptid = u.id where u.id is null
+
+b) select * from emp_table where deptid not in (select id from userdetails)
+
+from these two query i would not recommend to use query (a) to any developer as it will take much time in filtering after selecting all related data
+from result set while query (b) takes less time to get the same result.
